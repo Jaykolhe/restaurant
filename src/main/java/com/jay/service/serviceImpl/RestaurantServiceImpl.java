@@ -23,10 +23,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     try {
         Restaurant restaurant = mapDtoToEntity(restaurantDto);
         Restaurant restro = restaurantRepository.save(restaurant);
-        return true;
+
     }catch (RestaurantException e) {
         throw new RestaurantException("Failed to create restaurant");
     }
+        return true;
     }
 
     private Restaurant mapDtoToEntity(RestaurantDto restaurantDto) {

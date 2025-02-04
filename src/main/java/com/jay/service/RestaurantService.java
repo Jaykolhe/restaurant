@@ -10,4 +10,6 @@ public interface RestaurantService {
     boolean addRestaurant(RestaurantDto restaurantDto);
 
     List<RestaurantResponse> getAllRestaurants();
+
+    boolean deleteRestaurantById(int id);
 }

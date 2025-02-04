@@ -50,6 +50,16 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     }
 
+    public boolean deleteRestaurantById(int id){
+
+           if(!restaurantRepository.existsById(id)){
+               throw new RestaurantException("Restaurant not found with id "+id);
+           }
+           restaurantRepository.deleteById(id);
+           return true;
+
+    }
+
 
 
     private Restaurant mapDtoToEntity(RestaurantDto restaurantDto) {

@@ -38,4 +38,21 @@ public class RestaurantAddressController {
 
         return new ResponseEntity<>(restaurantAddressResponse,HttpStatus.OK);
     }
+
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String>  updateAddressById(@PathVariable int id, @RequestBody ResaurantAddressDto resaurantAddressDto){
+        restaurantAddressService.updateAddressById(id,resaurantAddressDto);
+
+        return new ResponseEntity<>("Address Updated",HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String>  deleteAddress(@PathVariable int id){
+
+        restaurantAddressService.deleteAddress(id);
+
+        return new ResponseEntity<>("Address Deleted", HttpStatus.OK);
+    }
 }

@@ -9,4 +9,8 @@ public interface RestaurantAddressService {
 
     public RestaurantAddressResponse getAddressById(int id);
 
+    public boolean updateAddressById(int id, ResaurantAddressDto resaurantAddressDto);
+
+    public boolean deleteAddress(int id);
+
 }

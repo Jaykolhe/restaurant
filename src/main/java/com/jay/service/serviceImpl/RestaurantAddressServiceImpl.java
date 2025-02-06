@@ -41,6 +41,34 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 
     }
 
+    @Override
+    public boolean updateAddressById(int id, ResaurantAddressDto resaurantAddressDto) {
+        RestaurantAddress restaurantAddress = restaurantAddressRepository.findById(id)
+                .orElseThrow(()-> new RestaurantException("Address not found with id"));
+
+        restaurantAddress.setAddressLine1(resaurantAddressDto.getAddressLine1());
+        restaurantAddress.setAddressLine2(resaurantAddressDto.getAddressLine2());
+        restaurantAddress.setCity(resaurantAddressDto.getCity());
+        restaurantAddress.setState(resaurantAddressDto.getState());
+        restaurantAddress.setCountry(resaurantAddressDto.getCountry());
+        restaurantAddress.setPincode(resaurantAddressDto.getPincode());
+
+        restaurantAddressRepository.save(restaurantAddress);
+        return true;
+
+
+    }
+
+    @Override
+    public boolean deleteAddress(int id) {
+        if(!restaurantAddressRepository.existsById(id)){
+            throw new RestaurantException("Restaurant Address not found with id "+id);
+        }
+        restaurantAddressRepository.deleteById(id);
+
+        return true;
+    }
+
     private RestaurantAddressResponse  mapEntityToDto(RestaurantAddress address) {
         return  RestaurantAddressResponse.builder()
                         .addressLine1(address.getAddressLine1())

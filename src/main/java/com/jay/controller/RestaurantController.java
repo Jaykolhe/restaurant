@@ -43,4 +43,13 @@ public class RestaurantController {
         restaurantService.deleteRestaurantById(id);
         return new ResponseEntity<>("Restaurant Deleted ", HttpStatus.OK);
     }
+
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String>  updateRestaurant(@PathVariable int id, @RequestBody RestaurantDto restaurantDto){
+        restaurantService.updateRestaurantById(id,restaurantDto);
+
+        return new ResponseEntity<>("Restro Updated",HttpStatus.OK);
+
+    }
 }

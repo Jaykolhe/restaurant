@@ -60,6 +60,22 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     }
 
+    @Override
+    public boolean updateRestaurantById(int id, RestaurantDto restaurantDto) {
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(()->new RestaurantException("Restaurant is Not exist With Given ID"));
+
+            if(restaurantDto.getName() != null){
+                restaurant.setName(restaurantDto.getName());
+            }
+
+            if(restaurantDto.getType()!= null){
+                restaurant.setType(restaurantDto.getType());
+            }
+            restaurantRepository.save(restaurant);
+
+            return true;
+    }
 
 
     private Restaurant mapDtoToEntity(RestaurantDto restaurantDto) {

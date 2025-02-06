@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface RestaurantService {
 
-    boolean addRestaurant(RestaurantDto restaurantDto);
+   public boolean addRestaurant(RestaurantDto restaurantDto);
 
-    List<RestaurantResponse> getAllRestaurants();
+   public List<RestaurantResponse> getAllRestaurants();
 
-    boolean deleteRestaurantById(int id);
+    public boolean deleteRestaurantById(int id);
+
+    public boolean updateRestaurantById(int id,RestaurantDto restaurantDto);
 }

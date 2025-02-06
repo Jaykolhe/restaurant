@@ -26,3 +26,4 @@ public class Restaurant {
     private String type;
 
 }
+

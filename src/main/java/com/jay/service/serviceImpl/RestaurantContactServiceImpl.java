@@ -28,7 +28,7 @@ public class RestaurantContactServiceImpl  implements RestaurantContactService {
         RestaurantContact restaurantContact = new RestaurantContact();
         restaurantContact.setRestaurantAddress(restaurantAddress);
         restaurantContact.setMobile(restaurantContactDto.getMobile());
-        restaurantContact.setEmail(restaurantContact.getEmail());
+        restaurantContact.setEmail(restaurantContactDto.getEmail());
 
         restaurantContactRepository.save(restaurantContact);
 

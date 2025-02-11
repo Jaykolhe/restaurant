@@ -1,5 +1,6 @@
 package com.jay.controller;
 
+
 import com.jay.model.Response.RestaurantOwnerResponse;
 import com.jay.model.RestaurantOwnerDto;
 import com.jay.service.RestaurantOwnerService;
@@ -22,11 +23,11 @@ public class RestaurantOwnerController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<String>  addOwner(@RequestBody RestaurantOwnerDto restaurantOwnerDto){
+    public ResponseEntity<RestaurantOwnerResponse>  addOwner(@RequestBody RestaurantOwnerDto restaurantOwnerDto){
 
-        restaurantOwnerService.addOwner(restaurantOwnerDto);
+       RestaurantOwnerResponse restaurantOwnerResponse = restaurantOwnerService.addOwner(restaurantOwnerDto);
 
-        return new ResponseEntity<>("Owner Added", HttpStatus.CREATED);
+        return new ResponseEntity<>(restaurantOwnerResponse, HttpStatus.CREATED);
     }
 
 
@@ -39,22 +40,7 @@ public class RestaurantOwnerController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<RestaurantOwnerResponse> getOwnerById(@PathVariable int id){
-        RestaurantOwnerResponse restaurantOwnerResponse = restaurantOwnerService.getOwnerById(id);
-        return  new ResponseEntity<>(restaurantOwnerResponse,HttpStatus.OK);
 
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String>  deleteOwnerById(@PathVariable int id){
-
-      restaurantOwnerService.deleteOwner(id);
-
-        return new ResponseEntity<>("Owner Deleted",HttpStatus.OK);
-
-
-    }
 
 
 

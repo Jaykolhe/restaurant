@@ -1,7 +1,6 @@
 package com.jay.service.serviceImpl;
 
 import com.jay.entity.RestaurantOwner;
-import com.jay.exceptions.RestaurantException;
 import com.jay.model.Response.RestaurantOwnerResponse;
 import com.jay.model.RestaurantOwnerDto;
 import com.jay.repository.RestaurantOwnerRepository;
@@ -19,14 +18,27 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
 
 
     @Override
-    public boolean addOwner(RestaurantOwnerDto restaurantOwnerDto) {
+    public RestaurantOwnerResponse addOwner(RestaurantOwnerDto restaurantOwnerDto) {
 
         RestaurantOwner restaurantOwner =mapDtoToEntity(restaurantOwnerDto);
-        restaurantOwnerRepository.save(restaurantOwner);
-        return true;
+        RestaurantOwner savedOwner = restaurantOwnerRepository.save(restaurantOwner);
+
+        RestaurantOwnerResponse restaurantOwnerResponse = mapRestaurantOwnerEntityToDto(savedOwner);
+
+      return restaurantOwnerResponse;
 
     }
 
+    private RestaurantOwnerResponse mapRestaurantOwnerEntityToDto(RestaurantOwner savedOwner) {
+
+        return RestaurantOwnerResponse.builder()
+                .name(savedOwner.getName())
+                .username(savedOwner.getUsername())
+                .email(savedOwner.getEmail())
+                .mobile(savedOwner.getMobile())
+                .passport(savedOwner.getPassport())
+                .build();
+    }
 
 
     @Override
@@ -36,30 +48,10 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
         return restaurantOwnerResponses;
     }
 
-
-
-    @Override
-    public RestaurantOwnerResponse getOwnerById(int id) {
-        RestaurantOwner restaurantOwner = restaurantOwnerRepository.findById(id)
-                .orElseThrow(()-> new RestaurantException("Owner not Exits for Given Id"));
-
-
-        return new RestaurantOwnerResponse(
-                restaurantOwner.getName(), restaurantOwner.getEmail(), restaurantOwner.getMobile(),restaurantOwner.getPassport()
-        );
-    }
-
-    @Override
-    public boolean deleteOwner(int id) {
-        restaurantOwnerRepository.deleteById(id);
-        return true;
-    }
-
-
     private List<RestaurantOwnerResponse> mapEntityToDto(List<RestaurantOwner> restaurantOwners) {
 
         return restaurantOwners.stream()
-                .map(owner-> new RestaurantOwnerResponse(owner.getName(), owner.getEmail(),owner.getMobile(),owner.getPassport()))
+                .map(owner-> new RestaurantOwnerResponse(owner.getName(), owner.getEmail(),owner.getMobile(),owner.getPassport(),owner.getUsername()))
                 .toList();
     }
 
@@ -69,9 +61,11 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
     private RestaurantOwner mapDtoToEntity(RestaurantOwnerDto restaurantOwnerDto) {
 
         return RestaurantOwner.builder()
+                .username(restaurantOwnerDto.getUsername())
                 .name(restaurantOwnerDto.getName())
                 .email(restaurantOwnerDto.getEmail())
                 .mobile(restaurantOwnerDto.getMobile())
+                .password(restaurantOwnerDto.getPassword())
                 .passport(restaurantOwnerDto.getPassport())
                 .build();
 

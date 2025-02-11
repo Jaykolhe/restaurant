@@ -1,6 +1,7 @@
 package com.jay.controller;
 
 
+
 import com.jay.model.Response.RestaurantResponse;
 import com.jay.model.RestaurantDto;
 import com.jay.service.RestaurantService;
@@ -23,12 +24,11 @@ public class RestaurantController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String>  registerRestaurant(@RequestBody RestaurantDto restaurantDto){
-       restaurantService.addRestaurant(restaurantDto);
-       return new ResponseEntity<>("Restro Added", HttpStatus.CREATED);
+    public ResponseEntity<RestaurantDto>  registerRestaurant(@RequestBody RestaurantDto restaurantDto){
+      RestaurantDto restaurant = restaurantService.addRestaurant(restaurantDto);
+       return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
 
     }
-
 
     @GetMapping("/getAllRestaurants")
     public ResponseEntity<List<RestaurantResponse>> getAllRestaurants(){
@@ -38,18 +38,21 @@ public class RestaurantController {
         return new ResponseEntity<>(restaurants,HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRestaurant(@PathVariable Integer id){
-        restaurantService.deleteRestaurantById(id);
-        return new ResponseEntity<>("Restaurant Deleted ", HttpStatus.OK);
+
+    @PutMapping("/update/{name}")
+    public ResponseEntity<RestaurantDto> updateRestaurant(@PathVariable String name, @RequestBody RestaurantDto restaurantDto) {
+        RestaurantDto restaurant = restaurantService.updateRestaurantByName(name, restaurantDto);
+        return new ResponseEntity<>(restaurant, HttpStatus.OK);
     }
 
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String>  updateRestaurant(@PathVariable int id, @RequestBody RestaurantDto restaurantDto){
-        restaurantService.updateRestaurantById(id,restaurantDto);
-
-        return new ResponseEntity<>("Restro Updated",HttpStatus.OK);
-
+    @GetMapping("/owner/{ownerUserName}")
+    public ResponseEntity<List<RestaurantResponse>> getRestaurantsByOwner(@PathVariable String ownerUserName) {
+        List<RestaurantResponse> restaurants = restaurantService.getAllRestaurantsWithOwnerUserName(ownerUserName);
+        return ResponseEntity.ok(restaurants);
     }
+
+
+
+
 }

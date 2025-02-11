@@ -4,6 +4,7 @@ import com.jay.entity.RestaurantAddress;
 import com.jay.entity.RestaurantContact;
 import com.jay.exceptions.RestaurantException;
 import com.jay.model.RestaurantContactDto;
+import com.jay.model.RestaurantDto;
 import com.jay.repository.RestaurantAddressRepository;
 import com.jay.repository.RestaurantContactRepository;
 import com.jay.service.RestaurantContactService;
@@ -17,24 +18,19 @@ public class RestaurantContactServiceImpl  implements RestaurantContactService {
 
     private final RestaurantContactRepository restaurantContactRepository;
 
-    private final RestaurantAddressRepository restaurantAddressRepository;
-
-
     @Override
-    public boolean addRestaurantContact(RestaurantContactDto restaurantContactDto, int address_id) {
-        RestaurantAddress restaurantAddress = restaurantAddressRepository.findById(address_id)
-                .orElseThrow(()-> new RestaurantException("Restaurant Address is not Found with given Id"));
+    public RestaurantContact addRestaurantContact(RestaurantDto restaurantDto, RestaurantAddress restaurantAddress) {
+        if (restaurantDto.getMobile() == null || restaurantDto.getMobile().isEmpty()) {
+            throw new RestaurantException("Mobile number is required.");
+        }
 
-        RestaurantContact restaurantContact = new RestaurantContact();
-        restaurantContact.setRestaurantAddress(restaurantAddress);
-        restaurantContact.setMobile(restaurantContactDto.getMobile());
-        restaurantContact.setEmail(restaurantContactDto.getEmail());
+        // map Dto to entity
+        RestaurantContact contact = new RestaurantContact();
+        contact.setMobile(restaurantDto.getMobile());
+        contact.setEmail(restaurantDto.getEmail());
+        contact.setRestaurantAddress(restaurantAddress);
 
-        restaurantContactRepository.save(restaurantContact);
-
-       return true;
+        return restaurantContactRepository.save(contact);
 
     }
-
-
 }

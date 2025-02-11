@@ -1,16 +1,15 @@
 package com.jay.service;
 
+import com.jay.entity.Restaurant;
+import com.jay.entity.RestaurantAddress;
 import com.jay.model.ResaurantAddressDto;
 import com.jay.model.Response.RestaurantAddressResponse;
+import com.jay.model.RestaurantDto;
 
 public interface RestaurantAddressService {
 
-    public boolean addAddress(ResaurantAddressDto resaurantAddressDto);
+    public RestaurantAddress addAddress(RestaurantDto restaurantDto, Restaurant restaurant);
 
-    public RestaurantAddressResponse getAddressById(int id);
-
-    public boolean updateAddressById(int id, ResaurantAddressDto resaurantAddressDto);
-
-    public boolean deleteAddress(int id);
+    public RestaurantAddressResponse getAddressByRestaurantName(String restaurantName);
 
 }

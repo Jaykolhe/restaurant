@@ -1,5 +1,6 @@
 package com.jay.service;
 
+import com.jay.entity.Restaurant;
 import com.jay.model.Response.RestaurantResponse;
 import com.jay.model.RestaurantDto;
 
@@ -7,11 +8,12 @@ import java.util.List;
 
 public interface RestaurantService {
 
-   public boolean addRestaurant(RestaurantDto restaurantDto);
+        RestaurantDto addRestaurant(RestaurantDto restaurantDto);
 
-   public List<RestaurantResponse> getAllRestaurants();
+        List<RestaurantResponse> getAllRestaurants();
 
-    public boolean deleteRestaurantById(int id);
+        RestaurantDto updateRestaurantByName(String restaurantName, RestaurantDto restaurantDto);
 
-    public boolean updateRestaurantById(int id,RestaurantDto restaurantDto);
+
+        List<RestaurantResponse> getAllRestaurantsWithOwnerUserName(String ownerUserName);
 }

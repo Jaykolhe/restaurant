@@ -1,17 +1,30 @@
 package com.jay.model;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 public class RestaurantDto {
 
 
-    private int restro_id;
-    private String name;
+    private String restaurantName;
+    private String ownerUserName;
+    private String mobile;
+    private String email;
     private String type;
+    private String foodLicense;
+    private String addressLine1;
+    private String addressLine2;
+    private String city;
+    private String state;
+    private String country;
+    private String pincode;
 
 }

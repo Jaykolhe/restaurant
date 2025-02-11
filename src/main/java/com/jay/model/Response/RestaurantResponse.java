@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class RestaurantResponse {
 
-    private int id;
     private String name;
     private String type;
 }

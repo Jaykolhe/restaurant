@@ -5,7 +5,9 @@ import com.jay.entity.RestaurantAddress;
 import com.jay.exceptions.RestaurantException;
 import com.jay.model.ResaurantAddressDto;
 import com.jay.model.Response.RestaurantAddressResponse;
+import com.jay.model.RestaurantDto;
 import com.jay.repository.RestaurantAddressRepository;
+import com.jay.repository.RestaurantLegalDocumentsRepository;
 import com.jay.repository.RestaurantRepository;
 import com.jay.service.RestaurantAddressService;
 import lombok.AllArgsConstructor;
@@ -19,59 +21,53 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
     private final RestaurantAddressRepository restaurantAddressRepository;
 
 
-
     @Override
-    public boolean addAddress(ResaurantAddressDto resaurantAddressDto) {
-
-        Restaurant restaurant = restaurantRepository.findById(resaurantAddressDto.getRestro_id())
-                                                    .orElseThrow(()-> new RestaurantException("Restaurant Not Found"));
-
-        RestaurantAddress address = mapDtoToEntity(resaurantAddressDto,restaurant);
-        restaurantAddressRepository.save(address);
-
-        return true;
-    }
-
-    @Override
-    public RestaurantAddressResponse getAddressById(int id) {
-        RestaurantAddress restaurantAddress = restaurantAddressRepository.findById(id)
-                .orElseThrow(()-> new RestaurantException("Address not found with id"));
-
-        return mapEntityToDto(restaurantAddress);
-
-    }
-
-    @Override
-    public boolean updateAddressById(int id, ResaurantAddressDto resaurantAddressDto) {
-        RestaurantAddress restaurantAddress = restaurantAddressRepository.findById(id)
-                .orElseThrow(()-> new RestaurantException("Address not found with id"));
-
-        restaurantAddress.setAddressLine1(resaurantAddressDto.getAddressLine1());
-        restaurantAddress.setAddressLine2(resaurantAddressDto.getAddressLine2());
-        restaurantAddress.setCity(resaurantAddressDto.getCity());
-        restaurantAddress.setState(resaurantAddressDto.getState());
-        restaurantAddress.setCountry(resaurantAddressDto.getCountry());
-        restaurantAddress.setPincode(resaurantAddressDto.getPincode());
-
-        restaurantAddressRepository.save(restaurantAddress);
-        return true;
-
-
-    }
-
-    @Override
-    public boolean deleteAddress(int id) {
-        if(!restaurantAddressRepository.existsById(id)){
-            throw new RestaurantException("Restaurant Address not found with id "+id);
+    public RestaurantAddress addAddress(RestaurantDto restaurantDto, Restaurant restaurant) {
+        if (restaurantDto == null || restaurant == null) {
+            throw new RestaurantException("Invalid restaurant or address details.");
         }
-        restaurantAddressRepository.deleteById(id);
 
-        return true;
+        // Convert DTO to Address Entity
+        RestaurantAddress restaurantAddress = mapDtoToAddressEntity(restaurantDto, restaurant);
+
+        return restaurantAddressRepository.save(restaurantAddress);
     }
+
+
+
+    @Override
+    public RestaurantAddressResponse getAddressByRestaurantName(String restaurantName) {
+        Restaurant restaurant = restaurantRepository.findByName(restaurantName)
+                .orElseThrow(()-> new RestaurantException("Restaurant Not Found with name "+restaurantName));
+
+        RestaurantAddress restaurantAddress = restaurantAddressRepository.findByRestaurant(restaurant)
+                .orElseThrow(()-> new RestaurantException("Address not Found for restaurant "+restaurantName));
+
+        RestaurantAddressResponse restaurantAddressResponse = mapEntityToDto(restaurantAddress);
+
+        return  restaurantAddressResponse;
+    }
+
+
+    private RestaurantAddress mapDtoToAddressEntity(RestaurantDto restaurantDto, Restaurant restaurant) {
+
+        return RestaurantAddress.builder()
+                .addressLine1(restaurantDto.getAddressLine1())
+                .addressLine2(restaurantDto.getAddressLine2())
+                .city(restaurantDto.getCity())
+                .state(restaurantDto.getState())
+                .country(restaurantDto.getCountry())
+                .pincode(restaurantDto.getPincode())
+                .restaurant(restaurant)
+                .build();
+    }
+
+
+
 
     private RestaurantAddressResponse  mapEntityToDto(RestaurantAddress address) {
         return  RestaurantAddressResponse.builder()
-                        .addressLine1(address.getAddressLine1())
+                .addressLine1(address.getAddressLine1())
                 .addressLine2(address.getAddressLine2())
                 .city(address.getCity())
                 .state(address.getState())
@@ -82,16 +78,4 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 
     }
 
-    private RestaurantAddress mapDtoToEntity(ResaurantAddressDto resaurantAddressDto, Restaurant restaurant) {
-        return RestaurantAddress.builder()
-                        .addressLine1(resaurantAddressDto.getAddressLine1())
-                        .addressLine2(resaurantAddressDto.getAddressLine2())
-                        .city(resaurantAddressDto.getCity())
-                        .state(resaurantAddressDto.getState())
-                        .country(resaurantAddressDto.getCountry())
-                        .pincode(resaurantAddressDto.getPincode())
-                        .restaurant(restaurant)
-                        .build();
-
-    }
 }

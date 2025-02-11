@@ -3,6 +3,8 @@ package com.jay.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +19,9 @@ public class RestaurantOwner {
     @Column(name = "owner_id")
     private int owner_id;
 
+    @Column(name= "username" ,nullable = false, unique = true, length = 50)
+    private String username;
+
     @Column(name = "owner_name")
     private String name;
 
@@ -28,6 +33,13 @@ public class RestaurantOwner {
 
     @Column(name = "mobile_number")
     private String mobile;
+
+    @Column(name = "password")
+    private String password;
+
+    @ManyToMany(mappedBy = "owners", fetch = FetchType.LAZY)
+    private Set<Restaurant> restaurants;
+
 
 
 }
